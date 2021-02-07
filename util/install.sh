@@ -179,7 +179,7 @@ function mn_deps {
         fi
         $install gcc make socat psmisc xterm ssh iperf telnet \
                  ethtool help2man $pf pylint pep8 \
-                 net-tools \
+                 net-tools bridge-utils vlan \
                  ${PYPKG}-pexpect ${PYPKG}-tk
         # Install pip
         $install ${PYPKG}-pip || $install ${PYPKG}-pip-whl

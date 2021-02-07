@@ -10,6 +10,7 @@ from functools import partial
 from mininet.net import Mininet
 from mininet.node import Host, Controller
 from mininet.node import UserSwitch, OVSSwitch, IVSSwitch
+from mininet.nodelib import LinuxBridge
 from mininet.topo import SingleSwitchTopo, LinearTopo
 from mininet.log import setLogLevel
 from mininet.util import quietRun
@@ -64,6 +65,12 @@ class testSingleSwitchUserspace( testSingleSwitchCommon, unittest.TestCase ):
     "Test ping with single switch topology (Userspace switch)."
     switchClass = UserSwitch
 
+@unittest.skipUnless( quietRun( 'which brctl' ),
+                      'Linux bridge utilities are not installed' )
+class testSingleSwitchLinuxBridge( testSingleSwitchCommon, unittest.TestCase ):
+    "Test ping with LinuxBridge"
+    switchClass = LinuxBridge
+
 
 # Tell pylint not to complain about calls to other class
 # pylint: disable=E1101
@@ -101,6 +108,12 @@ class testLinearIVS( testLinearCommon, unittest.TestCase ):
 class testLinearUserspace( testLinearCommon, unittest.TestCase ):
     "Test all-pairs ping with LinearNet (Userspace switch)."
     switchClass = UserSwitch
+
+@unittest.skipUnless( quietRun( 'which brctl' ),
+                      'Linux bridge utilities are not installed' )
+class testLinearLinuxBridge( testLinearCommon, unittest.TestCase ):
+    "Test all-pairs ping with LinearNet (Userspace switch)."
+    switchClass = LinuxBridge
 
 
 if __name__ == '__main__':
