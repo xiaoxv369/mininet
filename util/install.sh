@@ -26,15 +26,12 @@ KERNEL_LOC=http://www.openflow.org/downloads/mininet
 
 # Attempt to identify Linux release
 
-DIST=Unknown
-RELEASE=Unknown
-CODENAME=Unknown
 ARCH=`uname -m`
 if [ "$ARCH" = "x86_64" ]; then ARCH="amd64"; fi
 if [ "$ARCH" = "i686" ]; then ARCH="i386"; fi
 
-test -e /etc/debian_version && DIST="Debian"
-grep Ubuntu /etc/lsb-release &> /dev/null && DIST="Ubuntu"
+test -e /etc/debian_version && DIST=${DIST:-"Debian"}
+grep Ubuntu /etc/lsb-release &> /dev/null && DIST=${DIST:-="Ubuntu"}
 if [ "$DIST" = "Ubuntu" ] || [ "$DIST" = "Debian" ]; then
     # Truly non-interactive apt-get installation
     install='sudo DEBIAN_FRONTEND=noninteractive apt-get -y -q install'
@@ -46,8 +43,8 @@ if [ "$DIST" = "Ubuntu" ] || [ "$DIST" = "Debian" ]; then
         $install lsb-release
     fi
 fi
-test -e /etc/fedora-release && DIST="Fedora"
-test -e /etc/redhat-release && DIST="RedHatEnterpriseServer"
+test -e /etc/fedora-release && DIST=${DIST:-"Fedora"}
+test -e /etc/redhat-release && DIST=${DIST:"RedHatEnterpriseServer"}
 if [ "$DIST" = "Fedora" -o "$DIST" = "RedHatEnterpriseServer" ]; then
     install='sudo yum -y install'
     remove='sudo yum -y erase'
@@ -58,7 +55,7 @@ if [ "$DIST" = "Fedora" -o "$DIST" = "RedHatEnterpriseServer" ]; then
         $install redhat-lsb-core
     fi
 fi
-test -e /etc/SuSE-release && DIST="SUSE Linux"
+test -e /etc/SuSE-release && DIST=${DIST:"SUSE Linux"}
 if [ "$DIST" = "SUSE Linux" ]; then
     install='sudo zypper --non-interactive install '
     remove='sudo zypper --non-interactive  remove '
@@ -68,11 +65,17 @@ if [ "$DIST" = "SUSE Linux" ]; then
 		$install openSUSE-release
     fi
 fi
+
 if which lsb_release &> /dev/null; then
-    DIST=`lsb_release -is`
+    DIST=${DIST:-`lsb_release -is`}
     RELEASE=`lsb_release -rs`
     CODENAME=`lsb_release -cs`
 fi
+
+DIST=${DIST:-Unknown}
+RELEASE=${RELEASE:-Unknown}
+CODENAME=${CODENAME:-Unknown}
+
 echo "Detected Linux distribution: $DIST $RELEASE $CODENAME $ARCH"
 
 # Kernel params
