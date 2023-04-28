@@ -23,8 +23,9 @@ jobs:
           # sudo apt-get upgrade -y -qq
           PYTHON=${{ matrix.py }} util/install.sh -nv
       - name: Disable slow udevd
-        run: |
-          sudo systemctl stop systemd-udevd || echo "couldn't disable udevd"
+        run: systemctl stop systemd-udevd systemd-udevd-kernel.socket \
+             systemd-udevd-control.socket \
+             || echo "couldn't disable udevd"
       - name: Sanity test
         run: |
           export sudo="sudo env PATH=$PATH"
