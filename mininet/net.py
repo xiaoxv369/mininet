@@ -109,7 +109,7 @@ from mininet.util import ( quietRun, fixLimits, numCores, ensureRoot,
 from mininet.term import cleanUpScreens, makeTerms
 
 # Mininet version: should be consistent with README and LICENSE
-VERSION = "2.3.1b3"
+VERSION = "2.3.1b4"
 
 class Mininet( object ):
     "Network emulation with hosts spawned in network namespaces."
@@ -851,7 +851,9 @@ class Mininet( object ):
             # Check for the client's source/output port
             if ( svals and cvals[ 'sport' ] == svals[ 'sport' ]
                  and int( svals[ 'rate' ] ) > 0 ):
+                debug( 'iperf cvals', cvals, 'svals', svals )
                 break
+        debug( 'iperf server out:', serverout )
         server.sendInt()
         serverout += server.waitOutput()
         result = [ fmtBps( svals[ 'rate'], fmt ),
