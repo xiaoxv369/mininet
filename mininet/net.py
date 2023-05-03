@@ -819,7 +819,7 @@ class Mininet( object ):
            seconds: iperf time to transmit
            port: iperf port
            returns: two-element array of [ server, client ] speeds
-           note: send() is buffered, so client rate can be much higher than
+           send() is buffered, so client rate can be much higher than
            the actual transmission rate; on an unloaded system, server
            rate should be much closer to the actual receive rate"""
         hosts = hosts or [ self.hosts[ 0 ], self.hosts[ -1 ] ]
@@ -843,7 +843,7 @@ class Mininet( object ):
         cliout = client.cmd( iperfArgs + '-t %d -c ' % seconds +
                              server.IP() + ' ' + bwArgs )
         cvals = self._iperfVals( cliout, serverip )
-        debug( 'iperf client output:', cliout, cvals )
+        debug( '*** iperf client output:', cliout, cvals )
         serverout = ''
         # Wait for output from the client session
         while True:
@@ -853,7 +853,7 @@ class Mininet( object ):
             if ( svals and cvals[ 'sport' ] == svals[ 'sport' ]
                  and int( svals[ 'rate' ] ) > 0 ):
                 break
-        debug( 'iperf server output:', serverout, svals )
+        debug( '*** iperf server output:', serverout, svals )
         server.sendInt()
         serverout += server.waitOutput()
         result = [ fmtBps( svals[ 'rate'], fmt ),
